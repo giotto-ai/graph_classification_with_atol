@@ -1,0 +1,9 @@
+# Ignore the data directory
+data/*
+
+# Ignore the git and pycharm trash
+.DS_Store
+.idea/
+__pycache__/
+.ipynb_checkpoints/
+.gitignore.swp
