@@ -120,7 +120,7 @@ def apply_graph_extended_persistence(A, filtration_val):
     return np.concatenate([dgmOrd0, dgmExt0, dgmRel1, dgmExt1], axis=0)
 
 
-def _check_diagram_dimensions(list_of_dgm):
+def _check_diagram_dimensions(list_of_dgm, replicate=False):
     # we analyze the maximum length of diagrams and their point labels (hom_dim)
     label_n = {}
     for dgm in list_of_dgm:
@@ -143,16 +143,23 @@ def _check_diagram_dimensions(list_of_dgm):
             if np.sum(label_points) > 0:
                 new_diag[0, temp: temp+np.sum(label_points)] = dgm[label_points]
                 if np.sum(label_points) < label_n[label]:
-                    new_diag[0, temp+np.sum(label_points):temp+label_n[label]] = new_diag[0, temp+np.sum(label_points)-1]
+                    if replicate:
+                        new_diag[0, temp+np.sum(label_points):temp+label_n[label]] = \
+                            new_diag[0, temp+np.sum(label_points)-1]
+                    else:
+                        temp_points = np.zeros((label_n[label]-np.sum(label_points), 3))
+                        temp_points[:, -1] = label
+                        new_diag[0, temp + np.sum(label_points):temp + label_n[label]] = temp_points
                 temp += label_n[label]
         diags.append(new_diag)
     return np.concatenate(diags)
 
 
 class GeneralFiltrationGraphHomology(BaseEstimator, TransformerMixin):
-    def __init__(self, filtration_fun=None, n_jobs=None, **function_parameters):
+    def __init__(self, filtration_fun=None, replicate=False, n_jobs=None, **function_parameters):
         self.filtration_fun = _get_heat_kernel_filtered_simplex if filtration_fun is None else filtration_fun
         self.function_parameters = function_parameters
+        self.replicate = replicate
         self.n_jobs = n_jobs
 
     def fit(self, X, y=None, **fit_params):
@@ -167,7 +174,7 @@ class GeneralFiltrationGraphHomology(BaseEstimator, TransformerMixin):
             raise ValueError('The passed array must be the same in both fit and transform methods.')
         Xt = Parallel(n_jobs=self.n_jobs)(delayed(apply_graph_extended_persistence)(X[i], self.vertex_filtration_[i])
                                           for i in range(len(X)))
-        return _check_diagram_dimensions(Xt)
+        return _check_diagram_dimensions(Xt, self.replicate)
 
 
 

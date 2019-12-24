@@ -46,17 +46,22 @@ class Atol(BaseEstimator, ClusterMixin, TransformerMixin):
         Read more in [https://arxiv.org/abs/1909.13472]
     """
 
-    def __init__(self, n_centers=5, cluster_model=None, method=lapl_feats, aggreg=np.sum, order=None, n_jobs=None):
+    def __init__(self, n_centers=5, cluster_model=None, method=lapl_feats, aggreg=np.sum, order=None,
+                 padding=None, n_jobs=None):
         self.n_centers = n_centers
         self.cluster_model = cluster_model if cluster_model is not None else KMeans
         self.method = method
         self.aggreg = aggreg
         self.order = order
+        self.padding = padding
         self.n_jobs = n_jobs
         self.centers_ = []
         self.inertias_ = []
 
     def fit(self, X, y=None, **fit_params):
+        if self.padding is not None:
+            padding = np.array([self.padding, self.padding])
+            X = np.array([x[np.all(x[:, :-1] != padding, axis=1)] for x in X])
         diags = np.concatenate([diag for diag in X])
         self.hom_dims_ = np.unique(diags[:, -1]).astype(int)
         for hom_dim in self.hom_dims_:
