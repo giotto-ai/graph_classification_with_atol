@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.linalg import eigh
+from scipy.sparse import csgraph
 from sklearn.base import BaseEstimator, TransformerMixin
 from joblib import Parallel, delayed
 import gudhi as gd
@@ -10,8 +11,9 @@ def hks_signature(eigenvectors, eigenvals, time):
 
 
 def _get_heat_kernel_filtered_simplex(graph, time=0):
-    D_05 = np.diag(graph.sum(axis=1)**-0.5)
-    laplacian = np.identity(len(graph)) - np.linalg.multi_dot([D_05, graph, D_05])
+    # D_05 = np.diag(graph.sum(axis=1)**-0.5)
+    laplacian = csgraph.laplacian(graph, normed=True)
+    # laplacian = np.identity(len(graph)) - np.linalg.multi_dot([D_05, graph, D_05])
     eig_values, eig_vectors = eigh(laplacian)
     signature = hks_signature(eig_vectors, eig_values, time)
     return signature
@@ -170,7 +172,7 @@ class GeneralFiltrationGraphHomology(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-        if X != self.X_:
+        if np.any(X != self.X_):
             raise ValueError('The passed array must be the same in both fit and transform methods.')
         Xt = Parallel(n_jobs=self.n_jobs)(delayed(apply_graph_extended_persistence)(X[i], self.vertex_filtration_[i])
                                           for i in range(len(X)))

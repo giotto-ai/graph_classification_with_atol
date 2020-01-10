@@ -18,8 +18,10 @@ import warnings
 from sklearn.utils.validation import check_is_fitted
 
 
-def _compute_inertias(cluster_center, arrays):
-    return np.sqrt(np.sum(np.abs(arrays.reshape(-1, 2) - cluster_center.reshape(-1, 2))**2))
+def _compute_inertias(cluster_model, arrays):
+    cluster_center = cluster_model(n_clusters=1).fit(arrays).cluster_centers_
+    # sqrt removed since not present in the original paper
+    return np.sum(np.linalg.norm(arrays.reshape(-1, 2) - cluster_center.reshape(-1, 2), ord=2, axis=1)**2)
 
 
 def centers_and_inertias(diags, n_centers, cluster_model):
@@ -28,7 +30,7 @@ def centers_and_inertias(diags, n_centers, cluster_model):
         clusters = cluster_model(n_clusters=n_centers).fit(diags)
         if np.size(np.unique(clusters.labels_)) < n_centers:
             clusters = cluster_model(n_clusters=np.size(np.unique(clusters.labels_))).fit(diags)
-    inertias = np.array([_compute_inertias(clusters.cluster_centers_[lab], diags[clusters.labels_ == lab, :])
+    inertias = np.array([_compute_inertias(cluster_model, diags[clusters.labels_ == lab, :])
                          for lab in np.unique(clusters.labels_)])
     return clusters, inertias
 
@@ -47,33 +49,46 @@ class Atol(BaseEstimator, ClusterMixin, TransformerMixin):
     """
 
     def __init__(self, n_centers=5, cluster_model=None, method=lapl_feats, aggreg=np.sum, order=None,
-                 padding=None, n_jobs=None):
+                 ignore_hom_dim=False, padding=None, n_jobs=None):
         self.n_centers = n_centers
         self.cluster_model = cluster_model if cluster_model is not None else KMeans
         self.method = method
         self.aggreg = aggreg
         self.order = order
+        self.ignore_hom_dim = ignore_hom_dim
         self.padding = padding
         self.n_jobs = n_jobs
-        self.centers_ = []
-        self.inertias_ = []
 
     def fit(self, X, y=None, **fit_params):
+        self.centers_ = []
+        self.inertias_ = []
         if self.padding is not None:
             padding = np.array([self.padding, self.padding])
-            X = np.array([x[np.all(x[:, :-1] != padding, axis=1)] for x in X])
+            X = np.array([x[np.any(x[:, :-1] != padding, axis=1)] for x in X])
         diags = np.concatenate([diag for diag in X])
         self.hom_dims_ = np.unique(diags[:, -1]).astype(int)
-        for hom_dim in self.hom_dims_:
+        len_hom = len(self.hom_dims_)
+        hom_dims = self.hom_dims_
+        if self.ignore_hom_dim:
+            hom_dims = np.zeros((len_hom, )).astype(int)
+            diags[:, -1] = np.zeros(diags[:, -1].shape).astype(int)
+        for hom_dim in hom_dims:
             sub_diags = diags[diags[:, -1] == hom_dim][:, :-1]
             clusters, inertias = centers_and_inertias(diags=sub_diags, n_centers=self.n_centers,
                                                       cluster_model=self.cluster_model)
             self.centers_.append(clusters.cluster_centers_)
             self.inertias_.append(inertias)
+            if self.ignore_hom_dim:
+                self.centers_ = self.centers_*len_hom
+                self.inertias_ = self.inertias_*len_hom
+                break
         self._is_fitted = True
         return self
 
     def transform_single_diag(self, diag):
+        if self.padding is not None:
+            padding = np.array([self.padding, self.padding])
+            diag = diag[np.any(diag[:, :-1] != padding, axis=1)]
         diag_atol = [self.aggreg(self.method(diag[diag[:, -1] == hom_dim][:, :-1],
                                              self.centers_[hom_dim],
                                              self.inertias_[hom_dim]), axis=0)
