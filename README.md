@@ -1,6 +1,6 @@
 # Graph classification with Automatic Topologically-Oriented Learning
 
-The analysis in this repository is based on the paper ATOL: Automatic Topologically-Oriented Learning [link](https://arxiv.org/pdf/1909.13472.pdf) and the corresponding source code by Martin Royer (copyright INRIA) [link to ATOL repo](https://github.com/martinroyer/atol). We also adapted the Perslay codebase [link to perslay repo](https://github.com/MathieuCarriere/perslay) to match the API from giotto-learn.
+The analysis in this repository is based on the [paper](https://arxiv.org/pdf/1909.13472.pdf) ATOL: Automatic Topologically-Oriented Learning and the corresponding [source code](https://github.com/martinroyer/atol) by Martin Royer (copyright INRIA). We also adapted the Perslay [codebase](https://github.com/MathieuCarriere/perslay) to match the API from giotto-learn.
 
 
 ## Requisites
@@ -8,6 +8,7 @@ The analysis in this repository is based on the paper ATOL: Automatic Topologica
   * scikit-learn
   * joblib
   * numpy
+  * GUDHI
  
  ## Notebook
  The notebook contains an example of usage for the ATOL layer. It is applyied 
