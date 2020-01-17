@@ -152,7 +152,9 @@ def _check_diagram_dimensions(list_of_dgm, replicate=False):
                         temp_points = np.zeros((label_n[label]-np.sum(label_points), 3))
                         temp_points[:, -1] = label
                         new_diag[0, temp + np.sum(label_points):temp + label_n[label]] = temp_points
-                temp += label_n[label]
+            else:
+                new_diag[0, temp: temp + label_n[label], -1] = label
+            temp += label_n[label]
         diags.append(new_diag)
     return np.concatenate(diags)
 
