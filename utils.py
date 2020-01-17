@@ -1,5 +1,7 @@
 import os
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def blockPrinting(func):
@@ -15,6 +17,26 @@ def blockPrinting(func):
         return value
 
     return func_wrapper
+
+
+def plot_diagram(diagram, padding=0):
+    hom_dims = np.unique(diagram[:, -1]).astype(int)
+    diagram = diagram[np.any(diagram[:, :-1]!=padding, axis=1)]
+    colour_dictionary = {0: 'r', 1: 'b', 2: 'g', 3: 'c'}
+    nb_times = max(len(hom_dims) // 4, 1)
+    for time in range(nb_times):
+        plt.figure()
+        for hom_dim in np.arange(int(time*4), int(time*4+4)):
+            diag_points = diagram[diagram[:, -1]==hom_dim]
+            plt.plot(diag_points[:, 0], diag_points[:, 1], '.'+colour_dictionary[int(hom_dim-time*4)],
+                     label=f'dim{hom_dim}')
+    min_ = np.min(diagram[:, :-1])
+    max_ = np.max(diagram[:, :-1])
+    plt.plot([min_, max_], [min_, max_], 'k')
+    plt.xlabel('birth')
+    plt.ylabel('death')
+    plt.legend()
+    plt.show()
 
 
 

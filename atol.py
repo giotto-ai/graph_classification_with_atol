@@ -1,8 +1,6 @@
 # coding: utf-8
 """
-This is a generalized version of the atol code written by Martin Royer
-@author: Martin Royer and Diego Fiori
-@copyright: INRIA 2019
+This is a generalized version of the atol code written by Martin Royer et al.
 """
 
 import numpy as np

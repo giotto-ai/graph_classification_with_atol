@@ -17,5 +17,5 @@ The analysis in this repository is based on the [paper](https://arxiv.org/pdf/19
  
  ### Data
  The dataset we used in the notebook is taken from moleculenet.ai 
- and it is called ClinTox. It contains 1498 drugs molecules labelled in 2 classes: 
+ and it is called ClinTox. It contains 1478 drugs molecules labelled in 2 classes: 
  toxic and safe.
