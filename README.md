@@ -1,4 +1,4 @@
-# ATOL: Automatic Topologically-Oriented Learning
+# Graph classification with Automatic Topologically-Oriented Learning
 
 The repo contains the giotto.ai version of the ATOL layer originally developped 
 by Martin Royer et al. in this [paper](https://arxiv.org/pdf/1909.13472.pdf).
