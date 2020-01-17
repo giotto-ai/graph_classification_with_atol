@@ -1,7 +1,7 @@
 # Graph classification with Automatic Topologically-Oriented Learning
 
-The repo contains the giotto.ai version of the ATOL layer originally developped 
-by Martin Royer et al. in this [paper](https://arxiv.org/pdf/1909.13472.pdf).
+The analysis in this repository is based on the paper ATOL: Automatic Topologically-Oriented Learning [link](https://arxiv.org/pdf/1909.13472.pdf) and the corresponding source code by Martin Royer (copyright INRIA) [link to ATOL repo](https://github.com/martinroyer/atol). We also adapted the Perslay codebase [link to perslay repo](https://github.com/MathieuCarriere/perslay) to match the API from giotto-learn.
+
 
 ## Requisites
   * giotto-learn
@@ -15,5 +15,6 @@ by Martin Royer et al. in this [paper](https://arxiv.org/pdf/1909.13472.pdf).
  state of the art algorithms. 
  
  ### Data
- The dataset we used in the notebook is taken from the original paper 
- and it is called REDDIT5K. It contains 5000 graphs labelled in 5 classes.
+ The dataset we used in the notebook is taken from moleculenet.ai 
+ and it is called ClinTox. It contains 1498 drugs molecules labelled in 2 classes: 
+ toxic and safe.
