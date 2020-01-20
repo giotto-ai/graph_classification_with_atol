@@ -23,7 +23,7 @@ The analysis in this repository is based on the [paper](https://arxiv.org/pdf/19
  ## Getting Started
  Since we are going to use packages from both pip and conda you should have 
  [anaconda](https://www.anaconda.com/distribution/?gclid=Cj0KCQiAvJXxBRCeARIsAMSkApqg-qkK5wu2lEGCutGt3Oy0j2GT21HsFtmPyD6Il6VhOVKbPnNM_y8aAu3qEALw_wcB) 
- installed. Than in order to run the notebook do the following steps:
+ installed. Then, in order to run the notebook do the following steps:
  
  - Create a new environment with the needed packages
  
