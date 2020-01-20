@@ -19,3 +19,18 @@ The analysis in this repository is based on the [paper](https://arxiv.org/pdf/19
  The dataset we used in the notebook is taken from moleculenet.ai 
  and it is called ClinTox. It contains 1478 drugs molecules labelled in 2 classes: 
  toxic and safe.
+ 
+ ## Getting Started
+ Since we are going to use packages from both pip and conda you should have 
+ [anaconda](https://www.anaconda.com/distribution/?gclid=Cj0KCQiAvJXxBRCeARIsAMSkApqg-qkK5wu2lEGCutGt3Oy0j2GT21HsFtmPyD6Il6VhOVKbPnNM_y8aAu3qEALw_wcB) 
+ installed. Than in order to run the notebook do the following steps:
+ 
+ - Create a new environment with the needed packages
+ 
+ ``conda env create -f environment.yml``
+
+ - Activate the environment
+ 
+ ``conda activate atol-env``
+ 
+ Now you should be able to run the notebook! Enjoy it :) 
