@@ -12,7 +12,7 @@ The analysis in this repository is based on the [paper](https://arxiv.org/pdf/19
  
  ## Notebook
  The notebook contains an example of usage for the ATOL layer. It is applyied 
- to a graph classification problem and it reach good results, comparable to 
+ to a graph classification problem and it gets good results, comparable to 
  state of the art algorithms. 
  
  ### Data
