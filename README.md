@@ -5,19 +5,19 @@ In this repository we expolore the ATOL method for automatic feature generation 
 We also adapted the Perslay [codebase](https://github.com/MathieuCarriere/perslay) to match the API from giotto-learn.
 
 
-## Requisites
+## Requirements
   * giotto-learn
   * scikit-learn
   * joblib
   * numpy
   * GUDHI
  
- ## Notebook
+ ## Notebook overview
  The notebook contains an example of usage for the ATOL layer. It is applyied 
  to a graph classification problem and it gets good results, comparable to 
  state of the art algorithms. 
  
- ### Data
+ ## Data
  The dataset we used in the notebook is taken from moleculenet.ai 
  and it is called ClinTox. It contains 1478 drugs molecules labelled in 2 classes: 
  toxic and safe.
